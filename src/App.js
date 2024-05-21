@@ -26,7 +26,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-	        Edited <code>src/App.js</code> in real time again
+	        Edit <code>src/App.js</code> and publish to GitHub
         </p>
         <a
           className="App-link"
