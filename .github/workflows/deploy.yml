@@ -3,7 +3,7 @@ name: Deploy to S3
 on:
   push:
     branches:
-      - main  # Change to your default branch
+      - main  # Change to your default branch if different
 
 jobs:
   deploy:
@@ -16,19 +16,19 @@ jobs:
     - name: Install dependencies
       run: |
         npm install
-        # Add other build steps if needed
 
     - name: Build static site
       run: npm run build  # Adjust to your build command
 
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
     - name: Deploy to S3
-      env:
-        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: ${{ secrets.AWS_REGION }}
       run: |
         aws s3 sync build/ s3://$AWS_S3_BUCKET --delete
-      shell: bash
-      uses: aws-actions/configure-aws-credentials@v1
-
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
